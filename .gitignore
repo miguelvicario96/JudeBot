@@ -1,0 +1,28 @@
+# Variables de entorno — NUNCA subir a Git
+.env
+
+# Base de datos local (SQLite por si acaso)
+*.db
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+dist/
+build/
+*.egg-info/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
