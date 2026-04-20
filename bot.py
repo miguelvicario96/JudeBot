@@ -34,6 +34,7 @@ CATEGORY_KEYWORDS = {
         "carne", "desayuno", "almuerzo", "cena", "lunch", "snack", "helado",
         "pan", "tortilla", "tamales", "torta", "burritos", "antojitos",
         "quesadillas", "enchiladas", "pozole", "birria", "barbacoa",
+        "galletas", "papas", "frituras", "botanas", "dulces", "chocolate",
     ],
     "transporte": [
         "gasolina", "uber", "taxi", "metro", "camion", "camión", "bus",
@@ -57,7 +58,7 @@ CATEGORY_KEYWORDS = {
     ],
     "ropa": [
         "ropa", "zapatos", "tenis", "camisa", "pantalon", "pantalón",
-        "vestido", "zara", "h&m", "shein", "tienda", "boutique",
+        "vestido", "zara", "h&m", "shein", "boutique",
     ],
     "hogar": [
         "renta", "luz", "agua", "internet", "gas", "limpieza", "mueble",
@@ -155,7 +156,7 @@ def progress_bar(value: float, max_value: float, length: int = 10) -> str:
 # ---------------------------------------------------------------------------
 
 HELP_TEXT = """
-👋 *Bot de Gastos Personales*
+👋 *JudeBot para Registro de Gastos Personales*
 
 Registra un gasto enviando un mensaje como:
 • `Café 100`
