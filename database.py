@@ -1,8 +1,10 @@
 import os
 import ssl
 import pg8000.dbapi
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
+
+MEXICO_TZ = timezone(timedelta(hours=-6))
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -55,7 +57,7 @@ def init_db():
 
 
 def add_expense(description: str, amount: float, category: str) -> int:
-    date = datetime.now().isoformat()
+    date = datetime.now(MEXICO_TZ).isoformat()
     conn = get_connection()
     try:
         cur = conn.cursor()
