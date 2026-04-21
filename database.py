@@ -162,6 +162,21 @@ def get_all_expenses_summary() -> dict:
     }
 
 
+def update_category(expense_id: int, category: str) -> bool:
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE expenses SET category = %s WHERE id = %s",
+            (category, expense_id),
+        )
+        updated = cur.rowcount
+        conn.commit()
+        return updated > 0
+    finally:
+        conn.close()
+
+
 def delete_expense(expense_id: int) -> bool:
     conn = get_connection()
     try:

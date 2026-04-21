@@ -169,6 +169,7 @@ Registra un gasto enviando un mensaje como:
 /categorias — Totales por categoría con barras de progreso
 /historial — Últimos 10 gastos registrados
 /analisis — Análisis inteligente con IA (Claude)
+/editar <id> <categoría> — Corregir la categoría de un gasto
 /borrar <id> — Eliminar un gasto por su ID
 /ayuda — Mostrar este mensaje
 
@@ -349,6 +350,47 @@ async def borrar(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"❌ No se encontró ningún gasto con ID `{expense_id}`.", parse_mode="Markdown")
 
 
+async def editar(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    VALID_CATEGORIES = list(CATEGORY_KEYWORDS.keys()) + ["otro"]
+
+    if len(context.args) < 2:
+        cats = " · ".join(VALID_CATEGORIES)
+        await update.message.reply_text(
+            "Uso: `/editar <id> <categoría>`\nEjemplo: `/editar 42 transporte`\n\n"
+            f"*Categorías válidas:*\n{cats}",
+            parse_mode="Markdown",
+        )
+        return
+
+    try:
+        expense_id = int(context.args[0])
+    except ValueError:
+        await update.message.reply_text("❌ El ID debe ser un número entero.")
+        return
+
+    category = context.args[1].lower()
+    if category not in VALID_CATEGORIES:
+        cats = " · ".join(VALID_CATEGORIES)
+        await update.message.reply_text(
+            f"❌ Categoría `{category}` no válida.\n\n*Categorías válidas:*\n{cats}",
+            parse_mode="Markdown",
+        )
+        return
+
+    updated = database.update_category(expense_id, category)
+    if updated:
+        emoji = CATEGORY_EMOJIS.get(category, "📦")
+        await update.message.reply_text(
+            f"✅ Gasto `#{expense_id}` actualizado a {emoji} *{category.capitalize()}*.",
+            parse_mode="Markdown",
+        )
+    else:
+        await update.message.reply_text(
+            f"❌ No se encontró ningún gasto con ID `{expense_id}`.",
+            parse_mode="Markdown",
+        )
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -366,6 +408,7 @@ def main():
     app.add_handler(CommandHandler("historial", historial))
     app.add_handler(CommandHandler("analisis", analisis))
     app.add_handler(CommandHandler("borrar", borrar))
+    app.add_handler(CommandHandler("editar", editar))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     logger.info("Bot iniciado. Esperando mensajes...")
